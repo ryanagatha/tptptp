@@ -1,18 +1,9 @@
 import { SAMPLES } from '../data/samples'
 
-const CRITERIA = ['akurasi', 'kelengkapan', 'kualitas']
-
-function autoWinner(a, b) {
-  if (a === undefined || a === null || b === undefined || b === null) return null
-  if (a > b) return 'erta'
-  if (b > a) return 'baseline'
-  return 'sama'
-}
-
-const WINNER_LABEL = { erta: 'ERTA', baseline: 'Baseline', sama: 'Sama' }
+const chip = (v) => v === 'erta' ? 'ERTA' : v === 'baseline' ? 'Base' : v === 'sama' ? 'Remis' : ''
 
 export default function RecapTable({ allScores }) {
-  let totalErtaWins = 0
+  let ertaWinsTotal = 0
 
   return (
     <div className="recap-section">
@@ -20,59 +11,57 @@ export default function RecapTable({ allScores }) {
       <table className="recap-table">
         <thead>
           <tr>
-            <th style={{ width: 28 }}>No</th>
-            <th style={{ width: 60 }}>Ticker</th>
-            <th style={{ width: 36 }}>Q</th>
-            <th style={{ width: 36 }}>Tier</th>
-            <th>Akurasi<br/>Faktual</th>
-            <th>Kelengkapan<br/>Jawaban</th>
-            <th>Kualitas<br/>Bukti</th>
-            <th>Skor<br/>ERTA</th>
-            <th>Skor<br/>Baseline</th>
+            <th style={{ width:28 }}>No</th>
+            <th style={{ width:60 }}>Ticker</th>
+            <th style={{ width:36 }}>Q</th>
+            <th style={{ width:36 }}>Tier</th>
+            <th>Akurasi</th>
+            <th>Kelengkapan</th>
+            <th>Kualitas</th>
+            <th>ERTA Unggul</th>
+            <th>Base Unggul</th>
             <th>Pemenang</th>
           </tr>
         </thead>
         <tbody>
           {SAMPLES.map(s => {
-            const sc = allScores?.[s.no]
-            const ak = autoWinner(sc?.akurasi?.erta,     sc?.akurasi?.baseline)
-            const kl = autoWinner(sc?.kelengkapan?.erta, sc?.kelengkapan?.baseline)
-            const ku = autoWinner(sc?.kualitas?.erta,    sc?.kualitas?.baseline)
-            const ertaTotal = CRITERIA.reduce((a, k) => a + (sc?.[k]?.erta     ?? 0), 0)
-            const baseTotal = CRITERIA.reduce((a, k) => a + (sc?.[k]?.baseline ?? 0), 0)
-            const w = autoWinner(ertaTotal, baseTotal)
+            const sc       = allScores?.[s.no] || {}
+            const ak       = sc.akurasi     || null
+            const kl       = sc.kelengkapan || null
+            const ku       = sc.kualitas    || null
+            const ertaWins = [ak, kl, ku].filter(v => v === 'erta').length
+            const baseWins = [ak, kl, ku].filter(v => v === 'baseline').length
+            const filled   = [ak, kl, ku].filter(Boolean).length
+            const isDone   = filled === 3
+            const overall  = isDone
+              ? (ertaWins > baseWins ? 'erta' : baseWins > ertaWins ? 'baseline' : 'sama')
+              : null
 
-            const isDone    = ak && kl && ku
-            const isPartial = !isDone && (ak || kl || ku)
-            if (w === 'erta') totalErtaWins++
+            if (overall === 'erta') ertaWinsTotal++
 
             return (
-              <tr key={s.no} className={isDone ? 'row-done' : isPartial ? 'row-partial' : ''}>
-                <td>{String(s.no).padStart(2, '0')}</td>
+              <tr key={s.no} className={isDone ? 'row-done' : filled > 0 ? 'row-partial' : ''}>
+                <td>{String(s.no).padStart(2,'0')}</td>
                 <td>{s.ticker}</td>
                 <td>{s.q}</td>
                 <td>T{s.tier}</td>
-                <td>{ak ? <WinChip v={ak} /> : ''}</td>
-                <td>{kl ? <WinChip v={kl} /> : ''}</td>
-                <td>{ku ? <WinChip v={ku} /> : ''}</td>
-                <td>{isDone ? ertaTotal : ''}</td>
-                <td>{isDone ? baseTotal : ''}</td>
-                <td>{w ? <WinChip v={w} /> : ''}</td>
+                <td>{ak ? <span className="winner-chip">{chip(ak)}</span> : ''}</td>
+                <td>{kl ? <span className="winner-chip">{chip(kl)}</span> : ''}</td>
+                <td>{ku ? <span className="winner-chip">{chip(ku)}</span> : ''}</td>
+                <td>{isDone ? ertaWins : ''}</td>
+                <td>{isDone ? baseWins : ''}</td>
+                <td>{overall ? <span className="winner-chip">{chip(overall)}</span> : ''}</td>
               </tr>
             )
           })}
         </tbody>
         <tfoot>
           <tr>
-            <td colSpan={9} style={{ textAlign: 'right' }}>TOTAL SAMPEL ERTA UNGGUL</td>
-            <td>{totalErtaWins} / 25</td>
+            <td colSpan={9} style={{ textAlign:'right' }}>TOTAL SAMPEL ERTA UNGGUL</td>
+            <td>{ertaWinsTotal} / 25</td>
           </tr>
         </tfoot>
       </table>
     </div>
   )
-}
-
-function WinChip({ v }) {
-  return <span className={`winner-chip ${v}`}>{v === 'erta' ? 'ERTA' : v === 'baseline' ? 'Baseline' : 'Sama'}</span>
 }

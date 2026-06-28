@@ -191,6 +191,18 @@ body {
 .score-radio .r-label.unggul { font-weight: 700; }
 .score-radio .r-label.tidak  { color: #666; }
 
+/* ── Winner radio (direct selection) ── */
+.winner-radio-group { display: flex; gap: 8px; }
+.winner-radio {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 14px; border: 1px solid #ccc; border-radius: 2px;
+  font-size: 12px; font-weight: 600; color: #555; cursor: pointer;
+  background: #fafafa; transition: all 0.1s; user-select: none;
+}
+.winner-radio input { display: none; }
+.winner-radio:hover { border-color: #666; color: #222; background: #f0f0f0; }
+.winner-radio.selected { background: #222; border-color: #222; color: #fff; }
+
 /* ── Winner chip ── */
 .winner-chip {
   display: inline-block; padding: 2px 10px;
