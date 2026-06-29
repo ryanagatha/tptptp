@@ -183,6 +183,15 @@ body {
 .criteria-table tbody tr:hover td { background: #f8f8f8; }
 .criteria-table tbody tr:hover td:first-child { background: #f0f0f0; }
 
+/* ── Alasan kualitatif textarea in criteria table ── */
+.alasan-textarea {
+  width: 100%; border: 1px solid #d0d0d0; border-radius: 2px;
+  padding: 4px 7px; font-size: 12px; font-family: inherit;
+  resize: vertical; min-height: 40px; background: #fff; color: #222;
+  line-height: 1.4;
+}
+.alasan-textarea:focus { outline: none; border-color: #333; }
+
 /* ── Score radios ── */
 .score-group { display: flex; gap: 14px; justify-content: center; }
 .score-radio { display: flex; align-items: center; gap: 4px; cursor: pointer; }

@@ -81,13 +81,15 @@ export default function SampleCard({ sample, scores, onChange, id }) {
         <table className="criteria-table">
           <thead>
             <tr>
-              <th style={{ width: 180 }}>Kriteria</th>
-              <th>Pemenang per Kriteria</th>
+              <th style={{ width: 150 }}>Kriteria</th>
+              <th style={{ width: 220 }}>Pemenang per Kriteria</th>
+              <th>Alasan Kualitatif</th>
             </tr>
           </thead>
           <tbody>
             {CRITERIA.map(({ key, label }) => {
               const w = getWinner(key)
+              const alasanKey = `${key}_alasan`
               return (
                 <tr key={key}>
                   <td>{label}</td>
@@ -106,6 +108,14 @@ export default function SampleCard({ sample, scores, onChange, id }) {
                         </label>
                       ))}
                     </div>
+                  </td>
+                  <td>
+                    <textarea
+                      className="alasan-textarea"
+                      placeholder="Tuliskan alasan singkat..."
+                      value={scores?.[alasanKey] ?? ''}
+                      onChange={e => onChange(alasanKey, e.target.value)}
+                    />
                   </td>
                 </tr>
               )

@@ -21,9 +21,9 @@ function doPost(e) {
       sheet.appendRow([
         'Timestamp', 'Nama', 'NIP', 'Jabatan', 'Instansi', 'LamaJabatan', 'Tanggal',
         'No', 'Ticker', 'Perusahaan', 'Q', 'Tier',
-        'Akurasi_ERTA', 'Akurasi_Baseline', 'Akurasi_Pemenang',
-        'Kelengkapan_ERTA', 'Kelengkapan_Baseline', 'Kelengkapan_Pemenang',
-        'Kualitas_ERTA', 'Kualitas_Baseline', 'Kualitas_Pemenang',
+        'Akurasi_Pemenang', 'Akurasi_Alasan',
+        'Kelengkapan_Pemenang', 'Kelengkapan_Alasan',
+        'Kualitas_Pemenang', 'Kualitas_Alasan',
         'Total_ERTA', 'Total_Baseline', 'Pemenang', 'Catatan'
       ])
       sheet.setFrozenRows(1)
@@ -44,10 +44,10 @@ function doPost(e) {
         identity.lamaJabatan || '',
         identity.tanggal     || '',
         r.no, r.ticker, r.company, r.q, r.tier,
-        r.akurasi_erta,      r.akurasi_baseline,      r.akurasi_pemenang,
-        r.kelengkapan_erta,  r.kelengkapan_baseline,  r.kelengkapan_pemenang,
-        r.kualitas_erta,     r.kualitas_baseline,     r.kualitas_pemenang,
-        r.total_erta, r.total_baseline, r.pemenang,
+        r.akurasi,            r.akurasi_alasan     || '',
+        r.kelengkapan,        r.kelengkapan_alasan || '',
+        r.kualitas,           r.kualitas_alasan    || '',
+        r.erta_wins, r.baseline_wins, r.pemenang,
         r.catatan || ''
       ])
     })

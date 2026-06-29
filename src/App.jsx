@@ -63,10 +63,13 @@ export default function App() {
     const overall  = ertaWins > baseWins ? 'ERTA' : baseWins > ertaWins ? 'Baseline' : (ak||kl||ku) ? 'Remis' : ''
     return {
       no: s.no, ticker: s.ticker, company: s.company, q: s.q, tier: `T${s.tier}`,
-      akurasi:     ak, kelengkapan: kl, kualitas: ku,
-      erta_wins:   ertaWins, baseline_wins: baseWins,
-      pemenang:    overall,
-      catatan:     sc.__notes__ || '',
+      akurasi:            ak, kelengkapan: kl, kualitas: ku,
+      akurasi_alasan:     sc.akurasi_alasan     || '',
+      kelengkapan_alasan: sc.kelengkapan_alasan || '',
+      kualitas_alasan:    sc.kualitas_alasan    || '',
+      erta_wins:          ertaWins, baseline_wins: baseWins,
+      pemenang:           overall,
+      catatan:            sc.__notes__ || '',
     }
   })
 
